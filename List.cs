@@ -13,11 +13,12 @@ namespace AsciiDocSharp
         Unordered
     }
 
-    public class List : Block
+    public class List(string marker, ListVariant variant, ListItem[] items, string? id, BaseInline[]? title, BaseInline[]? refText, BlockMetadata? metadata, Location? location) : Block(id, title, refText, metadata, location)
     {
         public const ElementType Name = ElementType.List;
-        public required string Marker;
-        public required ListVariant Variant;
-        public required NotImplementedException[] Items;
+        public required string Marker = marker;
+        public required ListVariant Variant = variant;
+        // TODO: validation that Items contains at least 1 item
+        public required ListItem[] Items = items;
     }
 }

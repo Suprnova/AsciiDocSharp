@@ -13,11 +13,14 @@ namespace AsciiDocSharp
         Paragraph
     }
 
-    public class LeafBlock : Block
+    // TODO: Ensure name only accepts Listing, Literal, Paragraph, Pass, Stem, and Verse.
+    // TODO: Ensure delimiter is set if form is Delimited
+    public class LeafBlock(ElementType name, LeafBlockForm form, BaseInline[]? inlines, string? delimiter, string? id, BaseInline[]? title, BaseInline[]? refText, BlockMetadata? metadata, Location? location) : Block(id, title, refText, metadata, location)
     {
-        public required ElementType Name {  get; set; }
-        public required BaseInline[] Inlines { get; set; } = [];
+        public required ElementType Name = name;
+        public required BaseInline[] Inlines = inlines ?? [];
+        public required LeafBlockForm Form = form;
 
-        public LeafBlockForm Form { get; set; }
+        public string? Delimiter = delimiter;
     }
 }

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp
 {
-    public class Author
+    public class Author(string? fullName, string? initials, string? firstName, string? middleName, string? lastName, string? address)
     {
-        public string? FullName;
-        public string? Initials;
-        public string? FirstName;
-        public string? MiddleName;
-        public string? LastName;
-        public string? Address;
+        public string? FullName = fullName;
+        public string? Initials = initials;
+        public string? FirstName = firstName;
+        public string? MiddleName = middleName;
+        public string? LastName = lastName;
+        public string? Address = address;
     }
 }

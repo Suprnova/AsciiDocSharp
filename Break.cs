@@ -12,9 +12,9 @@ namespace AsciiDocSharp
         Thematic
     }
 
-    public class Break : Block
+    public class Break(BreakVariant variant, string? id, BaseInline[]? title, BaseInline[]? refText, BlockMetadata? metadata, Location? location) : Block(id, title, refText, metadata, location)
     {
         public const ElementType Name = ElementType.Break;
-        public required BreakVariant Variant;
+        public required BreakVariant Variant = variant;
     }
 }

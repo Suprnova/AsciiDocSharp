@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp
 {
-    public abstract class Block : AbstractBlock
+    public abstract class Block(string? id, BaseInline[]? title, BaseInline[]? refText, BlockMetadata? metadata, Location? location) : AbstractBlock(id, title, refText, metadata, location)
     {
-        
     }
 }

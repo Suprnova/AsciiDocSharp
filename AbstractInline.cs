@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp
 {
-    public abstract class BaseInline
+    public abstract class BaseInline(ElementType name)
     {
-        public abstract ElementType Name { get; }
+        public required ElementType Name { get; set; } = name;
     }
 
-    public abstract class AbstractInline : BaseInline
+    public abstract class AbstractInline(ElementType name, BaseInline[] inlines, Location? location) : BaseInline(name)
     {
-        public const string Type = "inline";
-        public required BaseInline[] Inlines;
-        public Location? Location;
+        public const PositionType Type = PositionType.Inline;
+        public required BaseInline[] Inlines = inlines;
+        public Location? Location = location;
     }
 }
