@@ -12,7 +12,7 @@ namespace AsciiDocSharp
         Inline
     }
 
-    public abstract class AbstractBlock(string? id, BaseInline[]? title, BaseInline[]? refText, BlockMetadata? metadata, Location? location)
+    public abstract class AbstractBlock(string? id = null, BaseInline[]? title = null, BaseInline[]? refText = null, BlockMetadata? metadata = null, Location? location = null)
     {
         public const PositionType Type = PositionType.Block;
 
@@ -23,11 +23,11 @@ namespace AsciiDocSharp
         public Location? Location { get; set; } = location;
     }
 
-    public class BlockMetadata(Dictionary<String, String>? attributes, String[]? options, String[]? roles, Location? location)
+    public class BlockMetadata(Dictionary<String, String>? attributes = null, String[]? options = null, String[]? roles = null, Location? location = null)
     {
-        public required Dictionary<String, String> Attributes = attributes ?? [];
-        public required String[] Options  = options ?? [];
-        public required String[] Roles = roles ?? [];
+        public Dictionary<String, String> Attributes = attributes ?? [];
+        public String[] Options  = options ?? [];
+        public String[] Roles = roles ?? [];
 
         public Location? Location = location;
     }

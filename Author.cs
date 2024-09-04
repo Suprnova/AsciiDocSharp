@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp
 {
-    public class Author(string? fullName, string? initials, string? firstName, string? middleName, string? lastName, string? address)
+    public class Author(string? fullName = null, string? initials = null, string? firstName = null, string? middleName = null, string? lastName = null, string? address = null)
     {
         public string? FullName = fullName;
         public string? Initials = initials;

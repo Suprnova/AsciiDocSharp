@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp
 {
-    public class AbstractListItem(string marker, Block[]? blocks, BaseInline[]? principal, string? id, BaseInline[]? title, BaseInline[]? refText, BlockMetadata? metadata, Location? location) : AbstractBlock(id, title, refText, metadata, location)
+    public class AbstractListItem(string marker, Block[]? blocks = null, BaseInline[]? principal = null, string? id = null, BaseInline[]? title = null, BaseInline[]? refText = null, BlockMetadata? metadata = null, Location? location = null) : AbstractBlock(id, title, refText, metadata, location)
     {
         // TODO: This does not include Section objects, should create a new class or add validation
-        public required Block[]? Blocks { get; set; } = blocks ?? ([]);
-        public required string Marker = marker;
+        public Block[]? Blocks { get; set; } = blocks ?? ([]);
+        public string Marker = marker;
 
         public BaseInline[]? Principal = principal;
     }

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp
 {
-    public class Section(int level, BaseInline[] title, SectionBody[]? blocks, string? id, BaseInline[]? refText, BlockMetadata? metadata, Location? location) : AbstractHeading(level, title, id, refText, metadata, location)
+    public class Section(int level, BaseInline[] title, Block[]? blocks = null, string? id = null, BaseInline[]? refText = null, BlockMetadata? metadata = null, Location? location = null) : AbstractHeading(level, title, id, refText, metadata, location)
     {
         public const ElementType Name = ElementType.Section;
 
-        public required SectionBody[] Blocks { get; set; } = blocks ?? ([]);
+        public Block[] Blocks { get; set; } = blocks ?? ([]);
     }
 }

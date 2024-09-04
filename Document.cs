@@ -12,22 +12,23 @@ namespace AsciiDocSharp
         public const PositionType Type = PositionType.Block;
 
         public Dictionary<string, string>? Attributes;
-        public Heading? Heading;
-        public SectionBody[]? Blocks;
+        public Header? Header;
+        public Block[]? Blocks;
         public Location? Location;
 
-        public Document(Dictionary<string, string>? attributes, Heading? heading, SectionBody[]? blocks, Location? location)
+        public Document(Dictionary<string, string>? attributes = null, Header? header = null, Block[]? blocks = null, Location? location = null)
         {
-            if (heading is not null)
+            if (header is not null)
             {
                 if (attributes is null)
                 {
-                    throw new InvalidOperationException("A document that has a header must have attributes assigned to it.");
+                    // Documentation is unclear, ask team
+                    //throw new InvalidOperationException("A document that has a header must have attributes assigned to it.");
                 }
             }
 
             Attributes = attributes;
-            Heading = heading;
+            Header = header;
             Blocks = blocks;
             Location = location;
         }
@@ -38,10 +39,10 @@ namespace AsciiDocSharp
         }
     }
 
-    public class Heading
+    public class Header(BaseInline[]? title = null, Author[]? authors = null, Location? location = null)
     {
-        public BaseInline[]? Title;
-        public Author[]? Authors;
-        public Location? Location;
+        public BaseInline[]? Title = title;
+        public Author[]? Authors = authors;
+        public Location? Location = location;
     }
 }

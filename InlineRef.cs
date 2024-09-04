@@ -12,9 +12,9 @@ namespace AsciiDocSharp
         Xref
     }
 
-    public class InlineRef(RefVariant variant, string target, BaseInline[] inlines, Location? location) : AbstractInline(ElementType.Ref, inlines, location)
+    public class InlineRef(RefVariant variant, string target, BaseInline[] inlines, Location? location = null) : AbstractInline(ElementType.Ref, inlines, location)
     {
-        public required RefVariant Variant = variant;
-        public required string Target = target;
+        public RefVariant Variant = variant;
+        public string Target = target;
     }
 }

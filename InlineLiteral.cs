@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp
 {
-    public class InlineLiteral(ElementType name, string value, Location? location) : BaseInline(name)
+    public class InlineLiteral(ElementType name, string value, Location? location = null) : BaseInline(name)
     {
         public const string Type = "string";
-        public required string Value = value;
+        public string Value = value;
 
         public Location? Location = location;
     }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp
 {
-    public class DList(string marker, DListItem[] items, string? id, BaseInline[]? title, BaseInline[]? refText, BlockMetadata? metadata, Location? location) : Block(id, title, refText, metadata, location)
+    public class DList(string marker, DListItem[] items, string? id = null, BaseInline[]? title = null, BaseInline[]? refText = null, BlockMetadata? metadata = null, Location? location = null) : Block(id, title, refText, metadata, location)
     {
         public const ElementType Name = ElementType.DList;
-        public required string Marker = marker;
+        public string Marker = marker;
         // TODO: validation that Items contains at least 1 item
-        public required DListItem[] Items = items;
+        public DListItem[] Items = items;
     }
 }

@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp
 {
-    public class Location
+    public class Location(int lowerLine, int lowerCol, int upperLine, int upperCol, string[]? file = null)
     {
-        public required LocationBoundary Lower;
-        public required LocationBoundary Upper;
+        public LocationBoundary Lower = new(lowerLine, lowerCol, file);
+        public LocationBoundary Upper = new(upperLine, upperCol, file);
     }
 
-    public class LocationBoundary
+    public class LocationBoundary(int line, int col, string[]? file = null)
     {
-        public required int line;
-        public required int col;
+        public int Line = line;
+        public int Col = col;
         // Apparently can contain multiple files?
-        public string[]? file;
+        public string[]? File = file;
     }
 }

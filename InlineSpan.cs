@@ -14,9 +14,9 @@ namespace AsciiDocSharp
         Mark
     }
 
-    public class InlineSpan(SpanVariant variant, bool isConstrained, BaseInline[] inlines, Location? location) : AbstractInline(ElementType.Span, inlines, location)
+    public class InlineSpan(SpanVariant variant, bool isConstrained, BaseInline[] inlines, Location? location = null) : AbstractInline(ElementType.Span, inlines, location)
     {
-        public required SpanVariant Variant = variant;
-        public required bool IsConstrained = isConstrained;
+        public SpanVariant Variant = variant;
+        public bool IsConstrained = isConstrained;
     }
 }

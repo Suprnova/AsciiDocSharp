@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp
 {
-    public class ListItem(string marker, BaseInline[] principal, Block[]? blocks, string? id, BaseInline[]? title, BaseInline[]? refText, BlockMetadata? metadata, Location? location) : AbstractListItem(marker, blocks, principal, id, title, refText, metadata, location)
+    public class ListItem(string marker, BaseInline[] principal, Block[]? blocks = null, string? id = null, BaseInline[]? title = null, BaseInline[]? refText = null, BlockMetadata? metadata = null, Location? location = null) : AbstractListItem(marker, blocks, principal, id, title, refText, metadata, location)
     {
         public const ElementType Name = ElementType.ListItem;
     }
