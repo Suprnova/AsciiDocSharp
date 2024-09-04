@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp
 {
-    public enum ElementType
+    public enum PositionType
     {
         Block,
         Inline
@@ -14,7 +14,7 @@ namespace AsciiDocSharp
 
     public abstract class AbstractBlock
     {
-        public required ElementType Type { get; set; }
+        public required PositionType Type { get; set; }
 
         public string? Id { get; set; }
         public BaseInline[]? Title { get; set; }

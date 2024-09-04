@@ -12,9 +12,9 @@ namespace AsciiDocSharp
         Thematic
     }
 
-    public class Break : AbstractBlock
+    public class Break : Block
     {
-        public const string Name = "break";
+        public const ElementType Name = ElementType.Break;
         public required BreakVariant Variant;
     }
 }

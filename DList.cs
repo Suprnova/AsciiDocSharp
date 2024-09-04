@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp
 {
-    public class DList : AbstractBlock
+    public class DList : Block
     {
-        public const string Name = "dlist";
+        public const ElementType Name = ElementType.DList;
         public required string Marker;
         public required NotImplementedException[] Items;
     }

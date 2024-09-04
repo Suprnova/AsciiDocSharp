@@ -14,7 +14,7 @@ namespace AsciiDocSharp
 
     public class InlineRef(RefVariant variant, string target) : AbstractInline
     {
-        public override InlineName Name => InlineName.Ref;
+        public override ElementType Name => ElementType.Ref;
         public required RefVariant Variant = variant;
         public required string Target = target;
     }

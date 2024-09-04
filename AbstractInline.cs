@@ -6,18 +6,9 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp
 {
-    public enum InlineName
-    {
-        Span,
-        Ref,
-        Text,
-        CharRef,
-        Raw
-    }
-
     public abstract class BaseInline
     {
-        public abstract InlineName Name { get; }
+        public abstract ElementType Name { get; }
     }
 
     public abstract class AbstractInline : BaseInline

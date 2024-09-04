@@ -6,16 +6,6 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp
 {
-    public enum LeafBlockType
-    {
-        Listing,
-        Literal,
-        Paragraph,
-        Pass,
-        Stem,
-        Verse
-    }
-
     public enum LeafBlockForm
     {
         Delimited,
@@ -23,9 +13,9 @@ namespace AsciiDocSharp
         Paragraph
     }
 
-    public class LeafBlock : AbstractBlock
+    public class LeafBlock : Block
     {
-        public required LeafBlockType Name {  get; set; }
+        public required ElementType Name {  get; set; }
         public required BaseInline[] Inlines { get; set; } = [];
 
         public LeafBlockForm Form { get; set; }

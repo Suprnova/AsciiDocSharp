@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp
 {
-    public abstract class AbstractHeading : AbstractBlock
+    // TODO: Confirm if Section (which inherits AbstractHeading) should be considered a Block type.
+    public abstract class AbstractHeading : Block
     {
         public required int Level { get; set; }
     }

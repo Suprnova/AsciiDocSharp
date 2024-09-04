@@ -8,6 +8,6 @@ namespace AsciiDocSharp
 {
     public class DiscreteHeading : AbstractHeading
     {
-        public const string Name = "heading";
+        public const ElementType Name = ElementType.Heading;
     }
 }

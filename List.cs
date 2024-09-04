@@ -13,9 +13,9 @@ namespace AsciiDocSharp
         Unordered
     }
 
-    public class List : AbstractBlock
+    public class List : Block
     {
-        public const string Name = "list";
+        public const ElementType Name = ElementType.List;
         public required string Marker;
         public required ListVariant Variant;
         public required NotImplementedException[] Items;

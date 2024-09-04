@@ -16,7 +16,7 @@ namespace AsciiDocSharp
 
     public class InlineSpan(SpanVariant variant, bool isConstrained) : AbstractInline
     {
-        public override InlineName Name { get { return InlineName.Span; } }
+        public override ElementType Name => ElementType.Span;
         public required SpanVariant Variant = variant;
         public required bool IsConstrained = isConstrained;
     }

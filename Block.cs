@@ -8,6 +8,6 @@ namespace AsciiDocSharp
 {
     public abstract class Block : AbstractBlock
     {
-        public required string Name { get; set; }
+        
     }
 }

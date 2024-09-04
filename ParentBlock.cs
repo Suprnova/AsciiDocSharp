@@ -6,15 +6,6 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp
 {
-    public enum ParentBlockType
-    {
-        Admonition,
-        Example,
-        Sidebar,
-        Open,
-        Quote
-    }
-
     public enum AdmonitionVariant
     {
         Caution,
@@ -24,9 +15,9 @@ namespace AsciiDocSharp
         Warning
     }
 
-    public class ParentBlock
+    public class ParentBlock : Block
     {
-        public required ParentBlockType Type;
+        public required ElementType Name;
         public const string Form = "delimited";
         public required string Delimiter;
         public required Block[] Blocks { get; set; } = [];

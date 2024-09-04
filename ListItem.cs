@@ -8,7 +8,7 @@ namespace AsciiDocSharp
 {
     public class ListItem : AbstractListItem
     {
-        public const string Name = "listItem";
+        public const ElementType Name = ElementType.ListItem;
     }
 
     // TODO: Add a clause to the constructor that ensures principal is populated.

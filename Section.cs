@@ -8,7 +8,7 @@ namespace AsciiDocSharp
 {
     public class Section : AbstractHeading
     {
-        public const string Name = "section";
+        public const ElementType Name = ElementType.Section;
         public required SectionBody[] Blocks { get; set; } = [];
     }
 }

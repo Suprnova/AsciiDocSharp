@@ -8,7 +8,7 @@ namespace AsciiDocSharp
 {
     public class DListItem : AbstractListItem
     {
-        public const string Name = "dlistItem";
+        public const ElementType Name = ElementType.DListItem;
         public required BaseInline[] Terms;
     }
 }
