@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsciiDocSharp
+namespace AsciiDocSharp.Elements
 {
     public class Location(int lowerLine, int lowerCol, int upperLine, int upperCol, string[]? file = null)
     {

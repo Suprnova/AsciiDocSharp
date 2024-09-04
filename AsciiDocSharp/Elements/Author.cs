@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsciiDocSharp
+namespace AsciiDocSharp.Elements
 {
     public class Author(string? fullName = null, string? initials = null, string? firstName = null, string? middleName = null, string? lastName = null, string? address = null)
     {

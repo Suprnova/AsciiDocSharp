@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsciiDocSharp
+namespace AsciiDocSharp.Elements
 {
     public class AbstractListItem(string marker, Block[]? blocks = null, BaseInline[]? principal = null, string? id = null, BaseInline[]? title = null, BaseInline[]? refText = null, BlockMetadata? metadata = null, Location? location = null) : AbstractBlock(id, title, refText, metadata, location)
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsciiDocSharp
+namespace AsciiDocSharp.Elements
 {
     // TODO: ensure name only accepts Audio, Video, Image, and TOC
     public class BlockMacro(ElementType name, string? target = null, string? id = null, BaseInline[]? title = null, BaseInline[]? refText = null, BlockMetadata? metadata = null, Location? location = null) : Block(id, title, refText, metadata, location)

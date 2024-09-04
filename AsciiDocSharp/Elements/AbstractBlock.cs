@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsciiDocSharp
+namespace AsciiDocSharp.Elements
 {
     public enum PositionType
     {
@@ -23,11 +23,11 @@ namespace AsciiDocSharp
         public Location? Location { get; set; } = location;
     }
 
-    public class BlockMetadata(Dictionary<String, String>? attributes = null, String[]? options = null, String[]? roles = null, Location? location = null)
+    public class BlockMetadata(Dictionary<string, string>? attributes = null, string[]? options = null, string[]? roles = null, Location? location = null)
     {
-        public Dictionary<String, String> Attributes = attributes ?? [];
-        public String[] Options  = options ?? [];
-        public String[] Roles = roles ?? [];
+        public Dictionary<string, string> Attributes = attributes ?? [];
+        public string[] Options = options ?? [];
+        public string[] Roles = roles ?? [];
 
         public Location? Location = location;
     }
