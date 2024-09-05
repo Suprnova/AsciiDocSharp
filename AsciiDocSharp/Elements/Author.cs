@@ -6,13 +6,27 @@ using System.Threading.Tasks;
 
 namespace AsciiDocSharp.Elements
 {
-    public class Author(string? fullName = null, string? initials = null, string? firstName = null, string? middleName = null, string? lastName = null, string? address = null)
+    public class Author
     {
-        public string? FullName = fullName;
-        public string? Initials = initials;
-        public string? FirstName = firstName;
-        public string? MiddleName = middleName;
-        public string? LastName = lastName;
-        public string? Address = address;
+        public string? FullName;
+        public string? Initials;
+        public string? FirstName;
+        public string? MiddleName;
+        public string? LastName;
+        public string? Address;
+
+        public Author(string s)
+        {
+            var split = s.Split(' ');
+            FirstName = split[0];
+            if (split[^1].StartsWith('<') && split[^1].EndsWith('>')) {
+                Address = split[^1][1..^1];
+            }
+            LastName = split[Address is null ? ^1 : ^2];
+            if (split[1] != LastName)
+            {
+                MiddleName = split[1];
+            }
+        }
     }
 }

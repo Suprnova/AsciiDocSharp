@@ -10,7 +10,10 @@ namespace AsciiDocSharp.Elements
     {
         Strong,
         Emphasis,
-        Code,
+        Monospace,
+        LiteralMonospace,
+        Superscript,
+        Subscript,
         Mark
     }
 

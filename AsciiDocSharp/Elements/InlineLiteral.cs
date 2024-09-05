@@ -12,5 +12,10 @@ namespace AsciiDocSharp.Elements
         public string Value = value;
 
         public Location? Location = location;
+
+        public override void Substitute(SubstitutionGroup subs)
+        {
+            Substitutions.Substitute(Value, subs);
+        }
     }
 }
