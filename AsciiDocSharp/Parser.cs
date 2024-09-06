@@ -18,14 +18,18 @@ namespace AsciiDocSharp
             public SpanVariant Variant = variant;
         }
 
-        public class MatchResult(int index, string value, string inner, SpanVariant variant, bool isConstrained)
+        public class MatchResult(int index, string value, string inner, SpanVariant? variant = null, bool isConstrained = true)
         {
             public int Index = index;
             public string Value = value;
             public string Inner = inner;
-            public SpanVariant Variant = variant;
+            public SpanVariant? Variant = variant;
             public bool IsConstrained = isConstrained;
         }
+
+        public static readonly Regex PassConstrained = new(@"(?<=\s|^)\+\s*?([^+\00]+)\+(?=\s|[\p{P}])");
+
+        public static readonly Regex PassUnconstrained = new(@"\+\+\s*?([^(\+\+)]+)\+\+");
 
         public static readonly QuoteRegex[] ConstrainedQuoteRegexes = [
             new(@"(?<=\s|^)`\+\s*?([^`\+\00]+)\+`(?=\s|[\p{P}])", SpanVariant.LiteralMonospace),
@@ -49,77 +53,99 @@ namespace AsciiDocSharp
             return new LeafBlock(ElementType.Paragraph);
         }
 
-        public static BaseInline[] ParseIntoInlines(string text)
+        public class InlineParser(string input)
         {
-            string mutText = text;
+            public string Input = input;
+            private string MutInput = input;
+            public List<MatchResult> Matches = [];
+            public List<BaseInline> inlines = [];
 
-            List<MatchResult> matches = new();
-            List<BaseInline> inlines = [];
-
-            foreach (var pair in UnconstrainedQuoteRegexes)
+            public BaseInline[] Parse()
             {
-                foreach (Match match in Regex.Matches(mutText, pair.Pattern))
-                {
-                    matches.Add(new MatchResult(match.Index, match.Value, match.Groups.Values.Last().Value, pair.Variant, false));
-                    mutText = mutText.Replace(match.Value, "\0");
-                }
-            }
-            foreach (var pair in ConstrainedQuoteRegexes)
-            {
-                foreach (Match match in Regex.Matches(mutText, pair.Pattern, RegexOptions.Multiline))
-                {
-                    matches.Add(new MatchResult(match.Index, match.Value, match.Groups.Values.Last().Value, pair.Variant, true));
-                    mutText = mutText.Replace(match.Value, "\0");
-                }
-            }
-            string[] literalString = matches.Count > 0 ? text.Split(matches.Select(match => match.Value).ToArray(), StringSplitOptions.None) : [text];
-            matches.Sort((a, b) => a.Index - b.Index);
-            for (int i = 0; i < literalString.Length; i++)
-            {
-                if (!String.IsNullOrEmpty(literalString[i]))
-                {
-                    InlineLiteral literal = new(ElementType.Paragraph, literalString[i]);
-                    inlines.Add(literal);
-                }
-                if (i < matches.Count)
-                {
-                    InlineSpan span = new(matches[i].Variant, matches[i].IsConstrained, ParseIntoInlines(matches[i].Inner));
-                    inlines.Add(span);
-                }
+                return this.Pass().UnconstrainedQuotes().ConstrainedQuotes().Finish();
             }
 
-            return [.. inlines];
-        }
-
-        public static void Parse(string input)
-        {
-            ParseIntoInlines(input);
-            /*input = input.ReplaceLineEndings("\n").Trim();
-            Document? doc = null;
-            var lines = input.Split('\n');
-            StringBuilder buffer = new StringBuilder();
-
-            foreach (var pair in QuoteRegexes)
+            public InlineParser Pass()
             {
-                foreach (Match match in Regex.Matches(input, pair.Pattern, RegexOptions.Multiline))
+                foreach (Match m in PassUnconstrained.Matches(MutInput))
                 {
-                    foreach (Group group in match.Groups)
+                    AddMatch(m, null, false);
+                }
+
+                foreach (Match m in PassConstrained.Matches(MutInput))
+                {
+                    AddMatch(m, null, true);
+                }
+
+                return this;
+            }
+
+            public InlineParser UnconstrainedQuotes()
+            {
+                foreach (var pair in UnconstrainedQuoteRegexes)
+                {
+                    foreach (Match match in Regex.Matches(MutInput, pair.Pattern))
                     {
-                        System.Console.WriteLine(group.Value);
+                        AddMatch(match, pair.Variant, false);
                     }
                 }
+
+                return this;
             }
 
-            /*foreach (var line in lines)
+            public InlineParser ConstrainedQuotes()
             {
-                if (String.IsNullOrWhiteSpace(line))
+                foreach (var pair in ConstrainedQuoteRegexes)
                 {
-                    doc = new Document(buffer.ToString().Trim().Split('\n'));
-                    buffer.Clear();
-                    break;
+                    foreach (Match match in Regex.Matches(MutInput, pair.Pattern, RegexOptions.Multiline))
+                    {
+                        AddMatch(match, pair.Variant, true);
+                    }
                 }
-                buffer.Append(line + '\n');
-            }*/
+
+                return this;
+            }
+
+            // TODO: This does not reassemble correctly as the index is based off of MutInput, which can change length
+            public BaseInline[] Finish()
+            {
+                string[] outArr = Matches.Count > 0 ? Input.Split(Matches.Select(match => match.Value).ToArray(), StringSplitOptions.None) : [Input];
+                Matches.Sort((a, b) => a.Index - b.Index);
+
+                for (int i = 0; i < outArr.Length; i++)
+                {
+                    if (!String.IsNullOrEmpty(outArr[i]))
+                    {
+                        InlineLiteral literal = new(ElementType.Paragraph, outArr[i]);
+                        inlines.Add(literal);
+                    }
+                    if (i < Matches.Count)
+                    {
+                        if (Matches[i].Variant is null)
+                        {
+                            InlineLiteral literal = new(ElementType.Pass, Matches[i].Value);
+                        }
+                        else
+                        {
+                            InlineParser innerParser = new(Matches[i].Inner);
+                            InlineSpan span = new((SpanVariant)Matches[i].Variant, Matches[i].IsConstrained, innerParser.Parse());
+                            inlines.Add(span);
+                        }
+                    }
+                }
+                return [.. inlines];
+            }
+
+            private void AddMatch(Match match, SpanVariant? variant, bool isConstrained)
+            {
+                Matches.Add(new MatchResult(match.Index, match.Value, match.Groups.Values.Last().Value, variant, isConstrained));
+                MutInput = MutInput.Replace(match.Value, "\0");
+            }
+        }
+
+        public static Document ParseDocument(string input)
+        {
+            throw new NotImplementedException();
         }
     }
 }

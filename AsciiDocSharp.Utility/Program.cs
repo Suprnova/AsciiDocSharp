@@ -12,7 +12,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        var a = Parser.ParseIntoInlines("bold *constrained* & **un**constrained" +
+        var a = new Parser.InlineParser("bold *constrained* & **un**constrained" +
             "italic _constrained_ & __un__constrained" +
             "bold italic *_constrained_* & **__un__**constrained" +
             "monospace `constrained` & ``un``constrained" +
@@ -32,9 +32,9 @@ class Program
             "That's fan__freakin__tastic!" +
             "Don't pass generic ``Object``s to methods that accept ``String``s!" +
             "It was Beatle**__mania__**!" +
-            "// end::unconstrained-bold-italic-mono[]");
+            "// end::unconstrained-bold-italic-mono[]").Parse();
 
-        List<InlineSpan> b = new();
+        List<InlineSpan> b = [];
         foreach (var inline in a)
         {
             Output(inline);
