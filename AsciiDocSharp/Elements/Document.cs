@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AsciiDocSharp.Elements
+﻿namespace AsciiDocSharp.Elements
 {
     public class Document
     {
@@ -20,20 +12,27 @@ namespace AsciiDocSharp.Elements
 
         public Document() { }
 
-        public Document(Dictionary<string, string> attributes, Header? docHeader = null, Block[]? blocks = null, Location? location = null)
+        public Document(
+            Dictionary<string, string> attributes,
+            Header? docHeader = null,
+            Block[]? blocks = null,
+            Location? location = null
+        )
         {
             Attributes = attributes;
             DocHeader = docHeader;
             Blocks = blocks ?? [];
             Location = location;
         }
+
         // TODO: probably should move all of this logic to the parser class
         public Document(IEnumerable<string> strings)
         {
             for (int i = 0; i < strings.Count(); i++)
             {
                 string s = strings.ElementAt(i);
-                if (s.StartsWith("//")) continue;
+                if (s.StartsWith("//"))
+                    continue;
                 else if (s.StartsWith('='))
                 {
                     DocHeader ??= new Header();
@@ -41,7 +40,9 @@ namespace AsciiDocSharp.Elements
                     if (DocHeader.Title.Length != 0)
                     {
                         // TODO: log error, dont throw exception, and add handling for doctype
-                        throw new Exception("level 0 sections can only be used when doctype is book");
+                        throw new Exception(
+                            "level 0 sections can only be used when doctype is book"
+                        );
                     }
                     else
                     {
@@ -52,14 +53,15 @@ namespace AsciiDocSharp.Elements
                 else if (s.StartsWith(':'))
                 {
                     string key = s[1..s.IndexOf(':', 1)].Trim();
-                    string value = s[(s.IndexOf(':', 1)+1)..].Trim();
+                    string value = s[(s.IndexOf(':', 1) + 1)..].Trim();
                     Attributes ??= [];
                     Attributes.Add(key, value);
                 }
                 else
                 {
                     // This can't be a valid header, so we stop parsing and return what we have
-                    if (DocHeader?.Title is null) {
+                    if (DocHeader?.Title is null)
+                    {
                         return;
                     }
                     Author author = new(s.Trim());
@@ -67,11 +69,14 @@ namespace AsciiDocSharp.Elements
                 }
             }
             return;
-
         }
     }
 
-    public class Header(BaseInline[]? title = null, Author[]? authors = null, Location? location = null)
+    public class Header(
+        BaseInline[]? title = null,
+        Author[]? authors = null,
+        Location? location = null
+    )
     {
         public BaseInline[] Title = title ?? [];
         public Author[] Authors = authors ?? [];

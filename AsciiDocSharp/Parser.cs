@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-
+﻿using System.Text.RegularExpressions;
 using AsciiDocSharp.Elements;
 
 namespace AsciiDocSharp
 {
-    public class Parser
+    public partial class Parser
     {
-        public class QuoteRegex(string pattern, SpanVariant variant)
+        public class QuoteRegex(Regex pattern, SpanVariant variant)
         {
-            public string Pattern = pattern;
+            public Regex Pattern = pattern;
             public SpanVariant Variant = variant;
         }
 
-        public class MatchResult(int index, string value, string inner, SpanVariant? variant = null, bool isConstrained = true)
+        public class MatchResult(
+            int index,
+            string value,
+            string inner,
+            SpanVariant? variant = null,
+            bool isConstrained = true
+        )
         {
             public int Index = index;
             public string Value = value;
@@ -27,28 +26,30 @@ namespace AsciiDocSharp
             public bool IsConstrained = isConstrained;
         }
 
-        public static readonly Regex PassConstrained = new(@"(?<=\s|^)\+\s*?([^+\00]+)\+(?=\s|[\p{P}])");
+        public static readonly Regex PassConstrained = RxPassCon();
 
-        public static readonly Regex PassUnconstrained = new(@"\+\+\s*?([^(\+\+)]+)\+\+");
+        public static readonly Regex PassUnconstrained = RxPass();
 
-        public static readonly QuoteRegex[] ConstrainedQuoteRegexes = [
-            new(@"(?<=\s|^)`\+\s*?([^`\+\00]+)\+`(?=\s|[\p{P}])", SpanVariant.LiteralMonospace),
-            new(@"~\s*?([^~\00\s]+)~", SpanVariant.Subscript),
-            new(@"\^\s*?([^\^\00\s]+)\^", SpanVariant.Superscript),
-            new(@"(?<=\s|^)#\s*?([^#\00]+)#(?=\s|[\p{P}]|$)", SpanVariant.Mark),
-            new(@"(?<=\s|^)`\s*?([^`\00]+)`(?=\s|[\p{P}]|$)", SpanVariant.Monospace),
-            new(@"(?<=\s|^)\*\s*?([^\*\00]+)\*(?=\s|[\p{P}]|$)", SpanVariant.Strong),
-            new(@"(?<=\s|^)_\s*?([^_\00]+)_(?=\s|[\p{P}]|$)", SpanVariant.Emphasis),
+        public static readonly QuoteRegex[] ConstrainedQuoteRegexes =
+        [
+            new(RxLitMonoCon(), SpanVariant.LiteralMonospace),
+            new(RxSubCon(), SpanVariant.Subscript),
+            new(RxSupCon(), SpanVariant.Superscript),
+            new(RxMarkCon(), SpanVariant.Mark),
+            new(RxMonoCon(), SpanVariant.Monospace),
+            new(RxStrongCon(), SpanVariant.Strong),
+            new(RxEmCon(), SpanVariant.Emphasis),
         ];
 
-        public static readonly QuoteRegex[] UnconstrainedQuoteRegexes = [
-            new(@"##\s*?([^\00(##)]+)##", SpanVariant.Mark),
-            new(@"``\s*?([^\00(``)]+)``", SpanVariant.Monospace),
-            new(@"\*\*\s*?([^\00(\*\*)]+)\*\*", SpanVariant.Strong),
-            new(@"__\s*?([^\00(__)]+)__", SpanVariant.Emphasis)
-            ];
+        public static readonly QuoteRegex[] UnconstrainedQuoteRegexes =
+        [
+            new(RxMark(), SpanVariant.Mark),
+            new(RxMono(), SpanVariant.Monospace),
+            new(RxStrong(), SpanVariant.Strong),
+            new(RxEm(), SpanVariant.Emphasis),
+        ];
 
-        public static Block ParseIntoBlock(string text)
+        public static Block ParseIntoBlock()
         {
             return new LeafBlock(ElementType.Paragraph);
         }
@@ -84,7 +85,7 @@ namespace AsciiDocSharp
             {
                 foreach (var pair in UnconstrainedQuoteRegexes)
                 {
-                    foreach (Match match in Regex.Matches(MutInput, pair.Pattern))
+                    foreach (Match match in pair.Pattern.Matches(MutInput))
                     {
                         AddMatch(match, pair.Variant, false);
                     }
@@ -97,7 +98,7 @@ namespace AsciiDocSharp
             {
                 foreach (var pair in ConstrainedQuoteRegexes)
                 {
-                    foreach (Match match in Regex.Matches(MutInput, pair.Pattern, RegexOptions.Multiline))
+                    foreach (Match match in pair.Pattern.Matches(MutInput))
                     {
                         AddMatch(match, pair.Variant, true);
                     }
@@ -109,7 +110,13 @@ namespace AsciiDocSharp
             // TODO: This does not reassemble correctly as the index is based off of MutInput, which can change length
             public BaseInline[] Finish()
             {
-                string[] outArr = Matches.Count > 0 ? Input.Split(Matches.Select(match => match.Value).ToArray(), StringSplitOptions.None) : [Input];
+                string[] outArr =
+                    Matches.Count > 0
+                        ? Input.Split(
+                            Matches.Select(match => match.Value).ToArray(),
+                            StringSplitOptions.None
+                        )
+                        : [Input];
                 Matches.Sort((a, b) => a.Index - b.Index);
 
                 for (int i = 0; i < outArr.Length; i++)
@@ -128,7 +135,12 @@ namespace AsciiDocSharp
                         else
                         {
                             InlineParser innerParser = new(Matches[i].Inner);
-                            InlineSpan span = new((SpanVariant)Matches[i].Variant, Matches[i].IsConstrained, innerParser.Parse());
+                            InlineSpan span =
+                                new(
+                                    Matches[i].Variant ?? SpanVariant.Mark,
+                                    Matches[i].IsConstrained,
+                                    innerParser.Parse()
+                                );
                             inlines.Add(span);
                         }
                     }
@@ -138,7 +150,15 @@ namespace AsciiDocSharp
 
             private void AddMatch(Match match, SpanVariant? variant, bool isConstrained)
             {
-                Matches.Add(new MatchResult(match.Index, match.Value, match.Groups.Values.Last().Value, variant, isConstrained));
+                Matches.Add(
+                    new MatchResult(
+                        match.Index,
+                        match.Value,
+                        match.Groups.Values.Last().Value,
+                        variant,
+                        isConstrained
+                    )
+                );
                 MutInput = MutInput.Replace(match.Value, "\0");
             }
         }
@@ -147,5 +167,44 @@ namespace AsciiDocSharp
         {
             throw new NotImplementedException();
         }
+
+        [GeneratedRegex(@"\+\+\s*?([^(\+\+)]+)\+\+")]
+        private static partial Regex RxPass();
+
+        [GeneratedRegex(@"(?<=\s|^)\+\s*?([^+\00]+)\+(?=\s|[\p{P}])")]
+        private static partial Regex RxPassCon();
+
+        [GeneratedRegex(@"(?<=\s|^)`\+\s*?([^`\+\00]+)\+`(?=\s|[\p{P}])")]
+        private static partial Regex RxLitMonoCon();
+
+        [GeneratedRegex(@"~\s*?([^~\00\s]+)~")]
+        private static partial Regex RxSubCon();
+
+        [GeneratedRegex(@"\^\s*?([^\^\00\s]+)\^")]
+        private static partial Regex RxSupCon();
+
+        [GeneratedRegex(@"(?<=\s|^)#\s*?([^#\00]+)#(?=\s|[\p{P}]|$)")]
+        private static partial Regex RxMarkCon();
+
+        [GeneratedRegex(@"(?<=\s|^)`\s*?([^`\00]+)`(?=\s|[\p{P}]|$)")]
+        private static partial Regex RxMonoCon();
+
+        [GeneratedRegex(@"(?<=\s|^)\*\s*?([^\*\00]+)\*(?=\s|[\p{P}]|$)")]
+        private static partial Regex RxStrongCon();
+
+        [GeneratedRegex(@"(?<=\s|^)_\s*?([^_\00]+)_(?=\s|[\p{P}]|$)")]
+        private static partial Regex RxEmCon();
+
+        [GeneratedRegex(@"##\s*?([^\00(##)]+)##")]
+        private static partial Regex RxMark();
+
+        [GeneratedRegex(@"``\s*?([^\00(``)]+)``")]
+        private static partial Regex RxMono();
+
+        [GeneratedRegex(@"\*\*\s*?([^\00(\*\*)]+)\*\*")]
+        private static partial Regex RxStrong();
+
+        [GeneratedRegex(@"__\s*?([^\00(__)]+)__")]
+        private static partial Regex RxEm();
     }
 }

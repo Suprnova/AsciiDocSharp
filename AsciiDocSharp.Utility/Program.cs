@@ -12,27 +12,29 @@ class Program
 {
     static void Main(string[] args)
     {
-        var a = new Parser.InlineParser("bold *constrained* & **un**constrained" +
-            "italic _constrained_ & __un__constrained" +
-            "bold italic *_constrained_* & **__un__**constrained" +
-            "monospace `constrained` & ``un``constrained" +
-            "monospace bold `*constrained*` & ``**un**``constrained" +
-            "monospace italic `_constrained_` & ``__un__``constrained" +
-            "monospace bold italic `*_constrained_*` & ``**__un__**``constrained" +
-            "// end::b-bold-italic-mono[]" +
-            "// tag::constrained-bold-italic-mono[]" +
-            "It has *strong* significance to me." +
-            "I _cannot_ stress this enough." +
-            "Type `OK` to accept." +
-            "That *_really_* has to go." +
-            "Can't pick one? Let's use them `*_all_*`." +
-            "// end::constrained-bold-italic-mono[]" +
-            "// tag::unconstrained-bold-italic-mono[]" +
-            "**C**reate, **R**ead, **U**pdate, and **D**elete (CRUD)" +
-            "That's fan__freakin__tastic!" +
-            "Don't pass generic ``Object``s to methods that accept ``String``s!" +
-            "It was Beatle**__mania__**!" +
-            "// end::unconstrained-bold-italic-mono[]").Parse();
+        var a = new Parser.InlineParser(
+            "bold *constrained* & **un**constrained"
+                + "italic _constrained_ & __un__constrained"
+                + "bold italic *_constrained_* & **__un__**constrained"
+                + "monospace `constrained` & ``un``constrained"
+                + "monospace bold `*constrained*` & ``**un**``constrained"
+                + "monospace italic `_constrained_` & ``__un__``constrained"
+                + "monospace bold italic `*_constrained_*` & ``**__un__**``constrained"
+                + "// end::b-bold-italic-mono[]"
+                + "// tag::constrained-bold-italic-mono[]"
+                + "It has *strong* significance to me."
+                + "I _cannot_ stress this enough."
+                + "Type `OK` to accept."
+                + "That *_really_* has to go."
+                + "Can't pick one? Let's use them `*_all_*`."
+                + "// end::constrained-bold-italic-mono[]"
+                + "// tag::unconstrained-bold-italic-mono[]"
+                + "**C**reate, **R**ead, **U**pdate, and **D**elete (CRUD)"
+                + "That's fan__freakin__tastic!"
+                + "Don't pass generic ``Object``s to methods that accept ``String``s!"
+                + "It was Beatle**__mania__**!"
+                + "// end::unconstrained-bold-italic-mono[]"
+        ).Parse();
 
         List<InlineSpan> b = [];
         foreach (var inline in a)

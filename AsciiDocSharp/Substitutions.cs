@@ -1,5 +1,4 @@
-﻿using AsciiDocSharp.Elements;
-using System.Text;
+﻿using System.Text;
 
 namespace AsciiDocSharp
 {
@@ -10,7 +9,7 @@ namespace AsciiDocSharp
         Attributes,
         Replacements,
         Macros,
-        PostReplacements
+        PostReplacements,
     }
 
     public enum SubstitutionGroup
@@ -19,30 +18,32 @@ namespace AsciiDocSharp
         None,
         Normal,
         Pass,
-        Verbatim
+        Verbatim,
     }
 
     public static class Substitutions
     {
-        public static readonly Dictionary<string, string> SpecialCharacterDict = new()
-        {
-            { "<", "&lt;" },
-            { ">", "&gt;" },
-            { "&", "&amp;" }
-        };
+        public static readonly Dictionary<string, string> SpecialCharacterDict =
+            new()
+            {
+                { "<", "&lt;" },
+                { ">", "&gt;" },
+                { "&", "&amp;" },
+            };
 
-        public static readonly Dictionary<string, string> ReplacementDict = new()
-        {
-            { "(C)", "&#169" },
-            { "(R)", "&#174" },
-            { "(TM)", "&#8482" },
-            { "...", "&#8230;&#8203" },
-            { "->", "&#8594;" },
-            { "=>", "&#8658" },
-            { "<-", "&#8592;" },
-            { "<=", "&#8656" },
-            { "'", "&#8217" }
-        };
+        public static readonly Dictionary<string, string> ReplacementDict =
+            new()
+            {
+                { "(C)", "&#169" },
+                { "(R)", "&#174" },
+                { "(TM)", "&#8482" },
+                { "...", "&#8230;&#8203" },
+                { "->", "&#8594;" },
+                { "=>", "&#8658" },
+                { "<-", "&#8592;" },
+                { "<=", "&#8656" },
+                { "'", "&#8217" },
+            };
 
         public static string Substitute(string text, SubstitutionGroup group)
         {
@@ -50,10 +51,7 @@ namespace AsciiDocSharp
             switch (group)
             {
                 case SubstitutionGroup.Header:
-                    return builder
-                        .SpecialCharacters()
-                        .Attributes()
-                        .Text;
+                    return builder.SpecialCharacters().Attributes().Text;
                 case SubstitutionGroup.None:
                     return builder.Text;
                 case SubstitutionGroup.Normal:
@@ -68,9 +66,7 @@ namespace AsciiDocSharp
                 case SubstitutionGroup.Pass:
                     return builder.Text;
                 case SubstitutionGroup.Verbatim:
-                    return builder
-                        .SpecialCharacters()
-                        .Text;
+                    return builder.SpecialCharacters().Text;
             }
             throw new ArgumentException("Invalid SubstitutionGroup");
         }

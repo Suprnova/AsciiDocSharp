@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AsciiDocSharp.Converters
+﻿namespace AsciiDocSharp.Converters
 {
-    public class HTML5
-    {
-
-    }
+    public class HTML5 { }
 }

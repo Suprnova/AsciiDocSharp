@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AsciiDocSharp.Elements
+﻿namespace AsciiDocSharp.Elements
 {
     public enum ElementType
     {
@@ -35,6 +29,6 @@ namespace AsciiDocSharp.Elements
         Ref,
         Text,
         CharRef,
-        Raw
+        Raw,
     }
 }

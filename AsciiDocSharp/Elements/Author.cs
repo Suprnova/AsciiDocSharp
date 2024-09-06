@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AsciiDocSharp.Elements
+﻿namespace AsciiDocSharp.Elements
 {
     public class Author
     {
@@ -19,7 +13,8 @@ namespace AsciiDocSharp.Elements
         {
             var split = s.Split(' ');
             FirstName = split[0];
-            if (split[^1].StartsWith('<') && split[^1].EndsWith('>')) {
+            if (split[^1].StartsWith('<') && split[^1].EndsWith('>'))
+            {
                 Address = split[^1][1..^1];
             }
             LastName = split[Address is null ? ^1 : ^2];
