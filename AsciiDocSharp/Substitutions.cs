@@ -22,25 +22,8 @@ namespace AsciiDocSharp
         Verbatim
     }
 
-    public class SubstitutionPair(string openingMark, string closingMark, SpanVariant variant)
-    {
-        public string OpeningMark = openingMark;
-        public string ClosingMark = closingMark;
-        public SpanVariant Variant = variant;
-    }
-
     public static class Substitutions
     {
-        public static readonly SubstitutionPair[] QuoteDict = [
-            new("*", "*", SpanVariant.Strong),
-            new("_", "_", SpanVariant.Emphasis),
-            new("`", "`", SpanVariant.Monospace),
-            new("`+", "+`", SpanVariant.LiteralMonospace),
-            new("#", "#", SpanVariant.Mark),
-            new("~", "~", SpanVariant.Subscript),
-            new("^", "^", SpanVariant.Superscript)
-            ];
-
         public static readonly Dictionary<string, string> SpecialCharacterDict = new()
         {
             { "<", "&lt;" },

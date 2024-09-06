@@ -15,9 +15,18 @@ namespace AsciiDocSharp.Elements
 
         public Dictionary<string, string> Attributes = [];
         public Header? DocHeader;
-        public Block[]? Blocks = [];
+        public Block[] Blocks = [];
         public Location? Location;
 
+        public Document() { }
+
+        public Document(Dictionary<string, string> attributes, Header? docHeader = null, Block[]? blocks = null, Location? location = null)
+        {
+            Attributes = attributes;
+            DocHeader = docHeader;
+            Blocks = blocks ?? [];
+            Location = location;
+        }
         // TODO: probably should move all of this logic to the parser class
         public Document(IEnumerable<string> strings)
         {
