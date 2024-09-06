@@ -47,6 +47,7 @@ class Program
         if (i is InlineSpan span)
         {
             Console.WriteLine(span.Variant + ": ");
+            Console.WriteLine("Constrained: " + span.IsConstrained);
             foreach (var e in span.Inlines)
             {
                 Output(e);
