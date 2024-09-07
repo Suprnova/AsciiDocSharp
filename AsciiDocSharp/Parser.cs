@@ -107,7 +107,6 @@ namespace AsciiDocSharp
                 return this;
             }
 
-            // TODO: This does not reassemble correctly as the index is based off of MutInput, which can change length
             public BaseInline[] Finish()
             {
                 string[] outArr =
@@ -159,7 +158,12 @@ namespace AsciiDocSharp
                         isConstrained
                     )
                 );
-                MutInput = MutInput.Replace(match.Value, "\0");
+                // We want to maintain the same length to avoid index issues, and \0 is unparsable
+                // in the Regex to avoid matching multiple times
+                MutInput = MutInput.Replace(
+                    match.Value,
+                    String.Concat(Enumerable.Repeat("\0", match.Value.Length))
+                );
             }
         }
 
