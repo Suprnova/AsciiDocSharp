@@ -1,0 +1,35 @@
+﻿@((MarkupString)OpeningTag)
+@foreach (var inline in Span.Inlines) {
+	@if (inline is InlineLiteral lit)
+	{
+		<InlineLiteralView Literal="lit"/>
+	}
+	else if (inline is InlineSpan span)
+	{
+		<InlineSpanView Span="span"/>
+	}
+}@((MarkupString)ClosingTag)
+
+@code {
+	[Parameter]
+	public required InlineSpan Span { get; set; }
+
+	record SpanPair
+	{
+		public required string OpeningTag { get; init; }
+		public required string ClosingTag { get; init; }
+	}
+
+	private static readonly Dictionary<SpanVariant, SpanPair> SpanPairs = new()
+	{
+		{ SpanVariant.Emphasis, new SpanPair { OpeningTag = "<em>", ClosingTag = "</em>" } },
+		{ SpanVariant.Strong, new SpanPair { OpeningTag = "<strong>", ClosingTag = "</strong>" } },
+		{ SpanVariant.Monospace, new SpanPair { OpeningTag = "<code>", ClosingTag = "</code>" } },
+		{ SpanVariant.LiteralMonospace, new SpanPair { OpeningTag = "<code>", ClosingTag = "</code>" } },
+		{ SpanVariant.Subscript, new SpanPair { OpeningTag = "<sub>", ClosingTag = "</sub>" } },
+		{ SpanVariant.Superscript, new SpanPair { OpeningTag = "<sup>", ClosingTag = "</sup>" } }
+	};
+
+	private string OpeningTag => SpanPairs[Span.Variant].OpeningTag;
+	private string ClosingTag => SpanPairs[Span.Variant].ClosingTag;
+}

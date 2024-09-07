@@ -35,13 +35,17 @@ class Program
                 + "It was Beatle**__mania__**!"
                 + "// end::unconstrained-bold-italic-mono[]"
         ).Parse();
+        Task<string> task = AsciiDocSharp.Converters.HTML5.ConvertToHTML5(
+            new Document(
+                [],
+                new Header(
+                    [new InlineLiteral(ElementType.Paragraph, "Document Title")]
+                ),
+                [ new LeafBlock(ElementType.Paragraph, LeafBlockForm.Paragraph, a) ]
+            ));
+        task.Wait();
 
-        List<InlineSpan> b = [];
-        foreach (var inline in a)
-        {
-            Output(inline);
-        }
-        System.Console.WriteLine();
+        System.Console.Write(task.Result);
     }
 
     static void Output(BaseInline i)

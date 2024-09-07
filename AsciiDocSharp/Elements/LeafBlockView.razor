@@ -1,0 +1,19 @@
+﻿<div class="paragraph">
+	@foreach (var inline in Leaf.Inlines)
+	{
+		@if (inline is InlineLiteral lit)
+		{
+			<InlineLiteralView Literal="lit"/>
+		}
+		else if (inline is InlineSpan span)
+		{
+			<InlineSpanView Span="span"/>
+		}
+	}
+	)
+</div>
+
+@code {
+	[Parameter]
+	public required LeafBlock Leaf { get; set; }
+}

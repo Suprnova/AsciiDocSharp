@@ -1,0 +1,27 @@
+﻿@using System.Text
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@foreach (var inline in Doc.DocHeader?.Title)
+        {
+            @if (inline is InlineLiteral lit) {
+                <InlineLiteralView Literal="lit"/>
+            }
+        }
+    </title>
+</head>
+<body>
+    @foreach (var block in Doc.Blocks)
+	{
+		@if (block is LeafBlock leaf)
+		{
+			<LeafBlockView Leaf="leaf"/>
+		}
+	})
+</body>
+</html>
+
+@code {
+    [Parameter]
+    public required Document Doc { get; set; }
+}
