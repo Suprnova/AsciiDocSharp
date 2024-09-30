@@ -22,8 +22,5 @@
 
         public override bool IsBlock() => true;
         public override bool IsInline() => false;
-
-        // temporary fix to allow compiling
-        public override string GenerateId() => "";
     }
 }

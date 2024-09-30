@@ -6,8 +6,6 @@
 
         public override bool IsBlock() => false;
         public override bool IsInline() => true;
-
-        public override string GenerateId() => "";
     }
 
     public abstract class AbstractInline(
