@@ -1,19 +1,21 @@
 ﻿namespace AsciiDocSharp.Elements
 {
-    public abstract class BaseInline(ElementType name)
+    public abstract class BaseInline(ElementType context, Block? parent = null, Dictionary<string, string>? attributes = null) : AbstractNode(context, parent, attributes)
     {
-        public ElementType Name { get; set; } = name;
-
         public abstract void Substitute(SubstitutionGroup subs);
+
+        public override bool IsBlock() => false;
+        public override bool IsInline() => true;
+
+        public override string GenerateId() => "";
     }
 
     public abstract class AbstractInline(
-        ElementType name,
+        ElementType context,
         BaseInline[] inlines,
         Location? location = null
-    ) : BaseInline(name)
+    ) : BaseInline(context)
     {
-        public const PositionType Type = PositionType.Inline;
         public BaseInline[] Inlines = inlines;
         public Location? Location = location;
 

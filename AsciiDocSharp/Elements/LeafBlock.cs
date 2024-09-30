@@ -10,18 +10,16 @@
     // TODO: Ensure name only accepts Listing, Literal, Paragraph, Pass, Stem, and Verse.
     // TODO: Ensure delimiter is set if form is Delimited
     public class LeafBlock(
-        ElementType name,
+        ElementType context,
         LeafBlockForm? form = null,
         BaseInline[]? inlines = null,
         string? delimiter = null,
-        string? id = null,
-        BaseInline[]? title = null,
-        BaseInline[]? refText = null,
-        BlockMetadata? metadata = null,
-        Location? location = null
-    ) : Block(id, title, refText, metadata, location)
+        BaseInline? title = null,
+        BaseInline? refText = null,
+        Block? parent = null,
+        Dictionary<string, string>? attributes = null
+    ) : Block(context, title, refText, parent, attributes)
     {
-        public ElementType Name = name;
         public BaseInline[] Inlines = inlines ?? [];
 
         // what does a null form mean

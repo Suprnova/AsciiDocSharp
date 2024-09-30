@@ -8,14 +8,12 @@
 
     public class Break(
         BreakVariant variant,
-        string? id = null,
-        BaseInline[]? title = null,
-        BaseInline[]? refText = null,
-        BlockMetadata? metadata = null,
-        Location? location = null
-    ) : Block(id, title, refText, metadata, location)
+        BaseInline? title = null,
+        BaseInline? refText = null,
+        Block? parent = null,
+        Dictionary<string, string>? attributes = null
+    ) : Block(ElementType.Break, title, refText, parent, attributes)
     {
-        public const ElementType Name = ElementType.Break;
         public BreakVariant Variant = variant;
     }
 }

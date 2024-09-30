@@ -12,5 +12,8 @@
         {
             Substitutions.Substitute(Value, subs);
         }
+
+        // temporary fix to allow compiling
+        public override string GenerateId() => "";
     }
 }

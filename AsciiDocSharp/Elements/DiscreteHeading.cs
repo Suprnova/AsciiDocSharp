@@ -1,13 +1,12 @@
 ﻿namespace AsciiDocSharp.Elements
 {
     public class DiscreteHeading(
+        BaseInline title,
         int level,
-        BaseInline[] title,
-        string? id = null,
-        BaseInline[]? refText = null,
-        BlockMetadata? metadata = null,
-        Location? location = null
-    ) : AbstractHeading(level, title, id, refText, metadata, location)
+        BaseInline? refText = null,
+        Block? parent = null,
+        Dictionary<string, string>? attributes = null
+    ) : Heading(title, level, ElementType.Heading, refText, parent, attributes)
     {
         public const ElementType Name = ElementType.Heading;
     }

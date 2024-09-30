@@ -1,32 +1,75 @@
 ﻿namespace AsciiDocSharp.Elements
 {
-    public class Document
+
+    public class Document : Block
     {
-        public const ElementType Name = ElementType.Document;
-        public const PositionType Type = PositionType.Block;
-
-        public Dictionary<string, string> Attributes = [];
-        public Header? DocHeader;
-        public Block[] Blocks = [];
-        public Location? Location;
-
-        public Document() { }
-
-        public Document(
-            Dictionary<string, string> attributes,
-            Header? docHeader = null,
-            Block[]? blocks = null,
-            Location? location = null
-        )
+        public string? BaseDir { get; private set; }
+        public Block[] Blocks { get; set; } = [];
+        public bool CompatibilityMode { get; init; }
+        public string? OutfileSuffix { get; init; }
+        public Document? ParentDocument { get; private set; }
+        public SafeMode Safe { get; init; }
+        public bool SourceMap
         {
-            Attributes = attributes;
-            DocHeader = docHeader;
-            Blocks = blocks ?? [];
-            Location = location;
+            get => GetAttribute("sourcemap", "false") == "true";
+            set => SetAttribute("sourcemap", value ? "true" : "false");
+        }
+        public Configuration Options { get; init; }
+
+        public NotImplementedException? Catalog { get; init; }
+        public NotImplementedException? Backend { get; init; }
+        public NotImplementedException? Counters { get; init; }
+        public NotImplementedException? DocType { get; init; }
+        public Header? DocHeader { get; init; }
+        public NotImplementedException? Reader { get; init; }
+        public NotImplementedException? PathResolver { get; init; }
+        public NotImplementedException? Converter { get; init; }
+        public NotImplementedException? SyntaxHighlighter { get; init; }
+        public NotImplementedException? Extensions { get; init; }
+
+        // TODO: send title, refText, and attributes to base constructor
+        public Document(Configuration options, string? data = null) : base(ElementType.Document)
+        {
+            Options = options;
+
+            if (options.BaseDir is not null)
+            {
+                BaseDir = options.BaseDir;
+            }
+            else if (Attributes.GetAttribute("docdir") is not null)
+            {
+                BaseDir = Attributes.GetAttribute("docdir");
+            }
+            else
+            {
+                // TODO: change to working directory
+                BaseDir = ".";
+                Attributes.SetAttribute("docdir", BaseDir);
+            }
+
+            CompatibilityMode = Attributes.GetAttribute("compat-mode") == "true";
+            if (data is not null)
+            {
+                // TODO: parse data
+            }
+        }
+
+		// Temporary constructor until parsing is implemented
+		public Document(BaseInline title, Block[] blocks, Configuration options): base(ElementType.Document, title)
+		{
+            DocHeader = new Header(title);
+			Options = options;
+			Blocks = blocks;
+		}
+
+		private void SetParent(Document other)
+        {
+            ParentDocument = other;
+            BaseDir = other.BaseDir;
         }
 
         // TODO: probably should move all of this logic to the parser class
-        public Document(IEnumerable<string> strings)
+        /*public Document(IEnumerable<string> strings)
         {
             for (int i = 0; i < strings.Count(); i++)
             {
@@ -70,16 +113,17 @@
             }
             return;
         }
-    }
+    }*/
 
-    public class Header(
-        BaseInline[]? title = null,
+        public class Header(
+        BaseInline? title = null,
         Author[]? authors = null,
         Location? location = null
     )
-    {
-        public BaseInline[] Title = title ?? [];
-        public Author[] Authors = authors ?? [];
-        public Location? Location = location;
+        {
+            public BaseInline? Title = title;
+            public Author[] Authors = authors ?? [];
+            public Location? Location = location;
+        }
     }
 }

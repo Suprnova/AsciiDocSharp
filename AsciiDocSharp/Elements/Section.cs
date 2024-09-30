@@ -2,13 +2,12 @@
 {
     public class Section(
         int level,
-        BaseInline[] title,
+        BaseInline title,
         Block[]? blocks = null,
-        string? id = null,
-        BaseInline[]? refText = null,
-        BlockMetadata? metadata = null,
-        Location? location = null
-    ) : AbstractHeading(level, title, id, refText, metadata, location)
+        BaseInline? refText = null,
+        Block? parent = null,
+        Dictionary<string, string>? attributes = null
+    ) : Heading(title, level, ElementType.Section, refText, parent, attributes)
     {
         public const ElementType Name = ElementType.Section;
 

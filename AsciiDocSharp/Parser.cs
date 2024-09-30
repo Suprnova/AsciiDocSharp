@@ -49,11 +49,6 @@ namespace AsciiDocSharp
             new(RxEm(), SpanVariant.Emphasis),
         ];
 
-        public static Block ParseIntoBlock()
-        {
-            return new LeafBlock(ElementType.Paragraph);
-        }
-
         public class InlineParser(string input)
         {
             public string Input = input;
@@ -165,11 +160,6 @@ namespace AsciiDocSharp
                     String.Concat(Enumerable.Repeat("\0", match.Value.Length))
                 );
             }
-        }
-
-        public static Document ParseDocument(string input)
-        {
-            throw new NotImplementedException();
         }
 
         [GeneratedRegex(@"\+\+\s*?([^(\+\+)]+)\+\+")]

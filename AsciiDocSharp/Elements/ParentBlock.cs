@@ -11,19 +11,16 @@
 
     // TODO: Ensure variant is set if name is admonition.
     public class ParentBlock(
-        ElementType name,
+        ElementType context,
         string delimiter,
         Block[]? blocks = null,
         AdmonitionVariant? variant = null,
-        string? id = null,
-        BaseInline[]? title = null,
-        BaseInline[]? refText = null,
-        BlockMetadata? metadata = null,
-        Location? location = null
-    ) : Block(id, title, refText, metadata, location)
+        BaseInline? title = null,
+        BaseInline? refText = null,
+        Block? parent = null,
+        Dictionary<string, string>? attributes = null
+    ) : Block(context, title, refText, parent, attributes)
     {
-        public ElementType Name = name;
-        public const string Form = "delimited";
         public string Delimiter = delimiter;
         public Block[] Blocks { get; set; } = blocks ?? [];
 

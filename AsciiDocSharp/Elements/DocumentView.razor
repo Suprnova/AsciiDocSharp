@@ -2,16 +2,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@foreach (var inline in Doc.DocHeader?.Title)
-        {
-            @if (inline is InlineLiteral lit) {
-                <InlineLiteralView Literal="lit"/>
-            }
-        }
-    </title>
+	<title>
+		@if (Doc.DocHeader?.Title is InlineLiteral lit) {
+			<InlineLiteralView Literal="lit"/>
+		}
+	</title>
 </head>
 <body>
-    @foreach (var block in Doc.Blocks)
+	@foreach (var block in Doc.Blocks ?? Enumerable.Empty<Block>())
 	{
 		@if (block is LeafBlock leaf)
 		{
@@ -22,6 +20,6 @@
 </html>
 
 @code {
-    [Parameter]
-    public required Document Doc { get; set; }
+	[Parameter]
+	public required Document Doc { get; set; }
 }

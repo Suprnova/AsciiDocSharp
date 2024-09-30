@@ -1,16 +1,16 @@
 ﻿namespace AsciiDocSharp.Elements
 {
-    public class ListItem(
+    public class DescriptionListItem(
         string marker,
-        BaseInline[] principal,
+        BaseInline[] terms,
         Block[]? blocks = null,
+        BaseInline[]? principal = null,
         BaseInline? title = null,
         BaseInline? refText = null,
         Block? parent = null,
         Dictionary<string, string>? attributes = null
-    ) : AbstractListItem(marker, ElementType.ListItem, blocks, principal, title, refText, parent, attributes)
+    ) : AbstractListItem(marker, ElementType.DListItem, blocks, principal, title, refText, parent, attributes)
     {
+        public BaseInline[] Terms = terms;
     }
-
-    // TODO: Add a clause to the constructor that ensures principal is populated.
 }
